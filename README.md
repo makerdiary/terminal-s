@@ -5,7 +5,9 @@ Terminal S
 
 ![](https://user-images.githubusercontent.com/948283/82290238-050e5600-99d9-11ea-9b36-50fb12471e95.png)
 
-A super simple serial terminal has about 100 lines Python code.
+Terminal S is a super simple serial terminal with about 100 lines of Python code
+
+## Features
 
 + auto detect serial port
 + list available ports to choose
