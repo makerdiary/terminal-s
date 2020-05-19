@@ -70,9 +70,19 @@ def main(port, baudrate, parity, stopbits, l):
     def read_input():
         while device.is_open:
             ch = getch()
-            if ch == b'\x1d':   # 'ctrl + ]' to quit
+            # print(ch)
+            if ch == b'\x1d':                   # 'ctrl + ]' to quit
                 break
-            queue.append(ch)
+            if ch == b'\x00' or ch == b'\xe0':  # arrow keys' escape sequences
+                ch2 = getch()
+                conv = { b'H': b'A', b'P': b'B', b'M': b'C', b'K': b'D' }
+                if ch2 in conv:
+                    # Esc[
+                    queue.append(b'\x1b[' + conv[ch2])
+                else:
+                    queue.append(ch + ch2)
+            else:  
+                queue.append(ch)
 
     colorama.init()
 
@@ -90,6 +100,8 @@ def main(port, baudrate, parity, stopbits, l):
         except IOError:
             print('Device is disconnected')
             break
+        except UnicodeDecodeError:
+            print([x for x in line])
 
     device.close()
 
