@@ -1,0 +1,4 @@
+include README.md
+recursive-include power_profiler *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
