@@ -12,7 +12,7 @@ setup_requirements = ['wheel']
 
 
 setup(name='terminal-s',
-      version='0.0.1',
+      version='0.0.2',
       description='A super simple serial terminal',
       long_description=long_description,
       long_description_content_type='text/markdown',
