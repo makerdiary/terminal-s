@@ -85,7 +85,7 @@ def main(port, baudrate, parity, stopbits, l):
                 break
             if ch == b'\x00' or ch == b'\xe0':  # arrow keys' escape sequences
                 ch2 = getch()
-                esc_dict = { b'H': b'A', b'P': b'B', b'M': b'C', b'K': b'D' }
+                esc_dict = { b'H': b'A', b'P': b'B', b'M': b'C', b'K': b'D', b'G': b'H', b'O': b'F' }
                 if ch2 in esc_dict:
                     queue.append(b'\x1b[' + esc_dict[ch2])
                 else:
