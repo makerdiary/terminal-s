@@ -10,15 +10,15 @@ Requirement:
 """
 
 import os
-os.system('title Terminal S')
+if os.name == 'nt':
+    os.system('title Terminal S')
 
 from collections import deque
-import threading
 import sys
+import threading
 
 import colorama
 import click
-from getch import getch
 import serial
 from serial.tools import list_ports
 
@@ -68,6 +68,16 @@ def main(port, baudrate, parity, stopbits, l):
     queue = deque()
     
     def read_input():
+        if os.name == 'nt':
+            from msvcrt import getch
+        else:
+            import tty
+            import termios
+            stdin_fd = sys.stdin.fileno()
+            tty_attr = termios.tcgetattr(stdin_fd)
+            tty.setraw(stdin_fd)
+            getch = lambda: sys.stdin.read(1).encode()
+
         while device.is_open:
             ch = getch()
             # print(ch)
@@ -75,14 +85,16 @@ def main(port, baudrate, parity, stopbits, l):
                 break
             if ch == b'\x00' or ch == b'\xe0':  # arrow keys' escape sequences
                 ch2 = getch()
-                conv = { b'H': b'A', b'P': b'B', b'M': b'C', b'K': b'D' }
-                if ch2 in conv:
-                    # Esc[
-                    queue.append(b'\x1b[' + conv[ch2])
+                esc_dict = { b'H': b'A', b'P': b'B', b'M': b'C', b'K': b'D' }
+                if ch2 in esc_dict:
+                    queue.append(b'\x1b[' + esc_dict[ch2])
                 else:
                     queue.append(ch + ch2)
             else:  
                 queue.append(ch)
+
+        if os.name != 'nt':
+            termios.tcsetattr(stdin_fd, termios.TCSADRAIN, tty_attr)
 
     colorama.init()
 
