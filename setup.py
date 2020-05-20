@@ -6,13 +6,13 @@ from setuptools import setup
 with open('README.md') as f:
     long_description = f.read()
 
-requirements = ['pyserial', 'py-getch', 'colorama', 'click']
+requirements = ['pyserial', 'colorama', 'click']
 
 setup_requirements = ['wheel']
 
 
 setup(name='terminal-s',
-      version='0.0.2',
+      version='0.1.0',
       description='A super simple serial terminal',
       long_description=long_description,
       long_description_content_type='text/markdown',
