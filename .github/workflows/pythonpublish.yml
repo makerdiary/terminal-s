@@ -31,6 +31,7 @@ jobs:
           twine upload dist/*
       - name: Run PyInstaller
         run: |
+          pip install .
           python -m PyInstaller terminal-s.spec
           ls dist
       - name: Create archive
