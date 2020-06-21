@@ -108,12 +108,10 @@ def main(port, baudrate, parity, stopbits, l):
 
             line = device.readline()
             if line:
-                print(line.decode(), end='', flush=True)
+                print(line.decode(errors='replace'), end='', flush=True)
         except IOError:
             print('Device is disconnected')
             break
-        except UnicodeDecodeError:
-            print([x for x in line])
 
     device.close()
 
