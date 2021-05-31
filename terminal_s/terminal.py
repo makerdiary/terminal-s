@@ -23,6 +23,15 @@ import serial
 import datetime
 from serial.tools import list_ports
 
+# define our clear function
+def screen_clear():
+    # for windows
+    if os.name == 'nt':
+        os.system('cls')
+    # for mac and linux(here, os.name is 'posix')
+    else:
+        os.system('clear')
+
 
 def run(port, baudrate, parity='N', stopbits=1):
     try:
@@ -36,7 +45,10 @@ def run(port, baudrate, parity='N', stopbits=1):
         print('--- Failed to open {} ---'.format(port))
         return 0
 
-    print('--- {} is connected. Press Ctrl+] to quit, Press Ctrl+t to show or hide timestamp---'.format(port))
+    print('--- {} is connected.---'.format(port))
+    print('---Press Ctrl+] to quit---')
+    print('---Press Ctrl+t to show or hide timestamp---')
+    print('---Press Ctrl+l clear screen---')
     queue = deque()
     timestamp_en = bool()
     timestamp_input_en = bool()
@@ -58,6 +70,8 @@ def run(port, baudrate, parity='N', stopbits=1):
             # print(ch)
             if ch == b'\x1d':                   # 'ctrl + ]' to quit
                 break
+            if ch == b'\x0c':
+                screen_clear()                  # 'ctrl + l' to clear screen
             if ch == b'\x14':                   # 'ctrl + t' to change timestamp status
                 timestamp_en = bool(1-timestamp_en)
             if ch == b'\x00' or ch == b'\xe0':  # arrow keys' escape sequences for windows
@@ -111,6 +125,14 @@ def run(port, baudrate, parity='N', stopbits=1):
                 else:
                     time_now = datetime.datetime.now().strftime('%H:%M:%S.%f')
                     print('\033[1;35m ' + time_now + '\033[0m ' + line.decode(errors='replace'), end='', flush=True)
+                if (b'login:' in line):
+                    usrname = b'root\r\n';
+                    #print(usrname)
+                    device.write(usrname)
+                if (b'Password:' in line):
+                    password = b'CherryYoudao\r\n';
+                    #print(password)
+                    device.write(password)
         except IOError:
             print('--- {} is disconnected ---'.format(port))
             break
