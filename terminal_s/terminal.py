@@ -1,8 +1,6 @@
 """
 Terminal for serial port
-
 Requirement:
-
     + pyserial
     + colorama
     + py-getch
@@ -23,12 +21,12 @@ import serial
 import datetime
 from serial.tools import list_ports
 
-# define our clear function
+# define our clear function
 def screen_clear():
-    # for windows
+    # for windows
     if os.name == 'nt':
         os.system('cls')
-    # for mac and linux(here, os.name is 'posix')
+    # for mac and linux(here, os.name is 'posix')
     else:
         os.system('clear')
 
@@ -167,7 +165,7 @@ def main(port, baudrate, parity, stopbits, l):
         else:
             print('--- Available Ports ----')
             for i, v in enumerate(ports):
-                print('---  {}: {} {}'.format(i, v[0], v[2]))
+                print('---  {}: {} {}'.format(i, v[0], v[1]))
             if l:
                 return
             raw = input('--- Select port index: ')
